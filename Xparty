@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2025 X-MAS GAMBIT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Noto+Sans+SC:wght@400;900&display=swap');
+
+        :root {
+            --neon-green: #0f0;
+            --neon-pink: #ff0055;
+            --neon-blue: #00f3ff;
+            --neon-gold: #ffd700;
+        }
+
+        * { box-sizing: border-box; }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #050505;
+            font-family: 'Orbitron', 'Noto Sans SC', sans-serif;
+            color: white; overflow: hidden;
+        }
+
+        .scroll-container {
+            height: 100vh; width: 100vw;
+            overflow-y: scroll; scroll-snap-type: y mandatory; scroll-behavior: smooth;
+        }
+
+        section {
+            position: relative; height: 100vh; width: 100vw;
+            scroll-snap-align: start; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            overflow: hidden; padding: 20px; text-align: center;
+        }
+
+        /* --- 背景图优化 --- */
+        .bg-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; /* 强制铺满背景 */
+            z-index: 1; pointer-events: none;
+            filter: brightness(0.4) contrast(1.3) saturate(1.2); /* 增加赛博感滤镜 */
+            transition: transform 0.5s ease;
+        }
+
+        /* 呼吸动画：让静态图动起来 */
+        section.active .bg-img {
+            animation: deepBreath 10s infinite alternate linear;
+        }
+        @keyframes deepBreath {
+            from { transform: scale(1.0); }
+            to { transform: scale(1.15); }
+        }
+
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            /* 加深遮罩，保证文字清晰 */
+            background: radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 90%);
+            z-index: 2; pointer-events: none;
+        }
+
+        .content {
+            position: relative; z-index: 10; opacity: 0;
+            transform: translateY(30px); transition: all 0.8s ease-out;
+            max-width: 600px; width: 100%;
+            text-shadow: 0 4px 20px rgba(0,0,0,1);
+        }
+
+        section.active .content { opacity: 1; transform: translateY(0); }
+
+        /* 全屏扫描线特效 */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.3) 3px
+            );
+            pointer-events: none; z-index: 999;
+        }
+
+        h1 {
+            font-size: 2.8rem; line-height: 1; margin: 0 0 15px 0;
+            text-transform: uppercase; font-weight: 900; color: #fff;
+            text-shadow: 3px 3px 0 var(--neon-pink), -2px -2px 0 var(--neon-blue);
+        }
+        
+        h2 {
+            font-size: 0.9rem; color: #fff; background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.3); display: inline-block;
+            padding: 5px 15px; margin-bottom: 20px; backdrop-filter: blur(5px); letter-spacing: 2px;
+        }
+
+        p { font-size: 1rem; line-height: 1.6; margin: 5px 0; color: #eee; }
+
+        .game-grid {
+            display: grid; grid-template-columns: 1fr; gap: 12px; text-align: left;
+            margin-top: 20px; background: rgba(0,0,0,0.7); padding: 15px;
+            border-radius: 8px; border: 1px solid #555;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .game-item strong { display: block; color: var(--neon-green); font-size: 1.1rem; margin-bottom: 4px; }
+        .game-item span { font-size: 0.85rem; color: #ccc; }
+
+        .btn {
+            margin-top: 30px; background: rgba(0,0,0,0.8); color: var(--neon-blue);
+            border: 2px solid var(--neon-blue); padding: 15px 30px; font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif; text-transform: uppercase; cursor: pointer;
+            box-shadow: 0 0 15px var(--neon-blue); animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100% {box-shadow: 0 0 10px var(--neon-blue);} 50% {box-shadow: 0 0 25px var(--neon-blue);} }
+        
+        .scroll-hint {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            color: #fff; font-size: 2rem; opacity: 0.8; animation: bounce 2s infinite; z-index: 20;
+        }
+        @keyframes bounce { 0%, 100% {transform:translate(-50%,0);} 50% {transform:translate(-50%,-15px);} }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+
+    <div class="scroll-container">
+        <!-- 封面：赛博城市空景（无写实人脸，只有光影） -->
+        <section class="active">
+            <img src="https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=1000&auto=format&fit=crop" class="bg-img">
+            <div class="overlay"></div>
+            <div class="content">
+                <div style="font-size: 1rem; color: var(--neon-green); letter-spacing: 5px; margin-bottom: 10px;">2025.12.20</div>
+                <h1>X-MAS<br>GAMBIT</h1>
+                <h2 style="margin-top: 10px;">圣诞 · 博弈 · 狂欢</h2>
+                <p>Welcome to the Game.<br>欢迎来到博弈的法则。</p>
+            </div>
+            <div class="scroll-hint">▼</div>
+        </section>
+
+        <!-- 上半场 1：绿色代码/电路板/矩阵（替换了之前的加载失败图） -->
+        <section>
+            <img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?q=80&w=1000&auto=format&fit=crop" class="bg-img">
+            <div class="overlay"></div>
+            <div class="content">
+                <h2>PART I : 14:00</h2>
+                <h1 style="font-size: 2.2rem; color: var(--neon-green); text-shadow: none; border-bottom: 2px solid var(--neon-green); display:inline-block;">BRAIN WAR</h1>
+                <p>带上你的面具，隐藏你的底牌。</p>
+                <div class="game-grid">
+                    <div class="game-item"><strong>⛓️ 链式拍卖</strong><span>不仅是出价，更是对人性的估值</span></div>
+                    <div class="game-item"><strong>📜 七戒律</strong><span>规则存在的意义，就是为了被打破</span></div>
+                    <div class="game-item"><strong>📈 升序游戏</strong><span>在混乱中寻找唯一的秩序</span></div>
+                </div>
+            </div>
+            <div class="scroll-hint">▼</div>
+        </section>
+
+        <!-- 上半场 2：蓝色霓虹/抽象几何（替换了之前的扑克牌，用光影代替心理博弈） -->
+        <section>
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1000&auto=format&fit=crop" class="bg-img">
+            <div class="overlay"></div>
+            <div class="content">
+                <h2>PART I : 16:00</h2>
+                <h1 style="font-size: 2.2rem; color: var(--neon-blue);">PSYCH WAR</h1>
+                <p>不要相信任何人，哪怕是你最好的朋友。</p>
+                <div class="game-grid" style="border-color: var(--neon-blue);">
+                    <div class="game-item"><strong style="color:var(--neon-blue)">🃏 印第安扑克</strong><span>除你自己外，所有人都能看到你的命运</span></div>
+                    <div class="game-item"><strong style="color:var(--neon-blue)">🎲 秘密骰子</strong><span>概率是上帝的谎言</span></div>
+                    <div class="game-item"><strong style="color:var(--neon-blue)">🧩 填字博弈</strong><span>智商的绝对领域</span></div>
+                </div>
+            </div>
+            <div class="scroll-hint">▼</div>
+        </section>
+
+        <!-- 中场：金色粒子/火花（替换了钱，用抽象的金色代表财富与欲望） -->
+        <section>
+            <img src="https://images.unsplash.com/photo-1496337589254-7e19d01cec44?q=80&w=1000&auto=format&fit=crop" class="bg-img">
+            <div class="overlay"></div>
+            <div class="content">
+                <h2>INTERLUDE</h2>
+                <h1 style="color: var(--neon-gold); font-size: 2.5rem; text-shadow: 0 0 20px var(--neon-gold);">AUCTION</h1>
+                <div style="border: 2px dashed var(--neon-gold); padding: 20px; background: rgba(0,0,0,0.6); margin-top: 20px;">
+                    <p style="color: #fff; font-size: 1.1rem; font-weight: bold;">礼物 vs 垃圾</p>
+                    <p style="font-size: 0.9rem; color: #aaa;">将你赚到的游戏币兑换为现实。<br>唯一的线索只有模糊的【关键词】。</p>
+                </div>
+            </div>
+            <div class="scroll-hint">▼</div>
+        </section>
+
+        <!-- 下半场：模糊的紫色霓虹灯光（代表混沌、醉酒，无具体人脸） -->
+        <section>
+            <img src="https://images.unsplash.com/photo-1557992260-ec58e38d363c?q=80&w=1000&auto=format&fit=crop" class="bg-img">
+            <div class="overlay"></div>
+            <div class="content">
+                <h2>PART II : 19:00</h2>
+                <h1 style="color: var(--neon-pink); font-size: 2.5rem;">CHAOS MODE</h1>
+                <p>一醉方休，不醉不归！</p>
+                <div class="game-grid" style="grid-template-columns: 1fr 1fr; border-color: var(--neon-pink);">
+                    <div class="game-item" style="text-align:center;"><strong style="color:var(--neon-pink)">🎤 KTV WAR</strong></div>
+                    <div class="game-item" style="text-align:center;"><strong style="color:var(--neon-pink)">🍺 大姐牌</strong></div>
+                    <div class="game-item" style="text-align:center;"><strong style="color:var(--neon-pink)">🎲 大话骰</strong></div>
+                    <div class="game-item" style="text-align:center;"><strong style="color:var(--neon-pink)">🌪️ 世界大战</strong></div>
+                </div>
+            </div>
+            <div class="scroll-hint">▼</div>
+        </section>
+
+        <!-- 结尾：黑客代码界面 -->
+        <section>
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1000&auto=format&fit=crop" class="bg-img">
+            <div class="overlay"></div>
+            <div class="content">
+                <h1 style="font-size: 2.5rem;">JOIN US</h1>
+                <p>Are you ready?</p>
+                <button class="btn" id="hack-btn" onclick="revealLocation()">点击获取聚会坐标</button>
+                <div id="location-info" style="display:none; margin-top: 30px; border: 1px solid var(--neon-green); padding: 20px; background: rgba(0, 50, 0, 0.8);">
+                    <h3 style="margin:0 0 10px 0; color: var(--neon-green);">DATA DOWNLOADED</h3>
+                    <p style="font-size: 1.2rem; color: #fff;">📍 [详细地址已经进入您的大脑皮层]</p>
+                    <p style="font-size: 0.9rem; color: var(--neon-green);">Time: 2025.12.20 Sat.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 滚动监听：处理翻页动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+                else entry.target.classList.remove('active');
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('section').forEach(section => { observer.observe(section); });
+
+        // 按钮互动逻辑
+        function revealLocation() {
+            const btn = document.getElementById('hack-btn');
+            const info = document.getElementById('location-info');
+            btn.innerHTML = "DECRYPTING..."; btn.style.borderColor = "red"; btn.style.color = "red";
+            let count = 0;
+            const timer = setInterval(() => {
+                btn.style.opacity = (count % 2 === 0) ? 0.5 : 1; count++;
+                if(count > 6) { clearInterval(timer); btn.style.display = 'none'; info.style.display = 'block'; }
+            }, 150);
+        }
+    </script>
+</body>
+</html>
